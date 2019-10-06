@@ -1,0 +1,67 @@
+{% extends "layouts/base.html" %}
+
+{% block contents %}
+<section class="section">
+    <div class="container">
+        <a href="{% url 'favourites.index' %}" class="button is-info is-pulled-right">View favourites</a>
+        <h1 class="title">Add a new RSS</h1>
+        <form action="{% url 'rss.index' %}" method="POST">
+            {% csrf_token %}
+            <div>
+                {% include 'partials/_alerts.html' %}
+                <div class="field">
+                    <label class="label" for="url">url</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="url" name="url" class="input is-success" type="url" required placeholder="Enter the rss url">
+                        <p class="help is-danger">{{ form.url.error }}</p>
+                    </div>
+                </div>
+                <div class="control">
+                    <button class="button is-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Your RSS data</h1>
+    </div>
+    <table class="table is-hoverable is-fullwidth">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>URL</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.url }}</td>
+            <td>
+                <div class="columns">
+                    <div class="column">
+                        <a class="button is-primary" href="{% url 'rss.details' item.id %}">View Data</a>
+                    </div>
+                    <div class="column">
+                        <form action="{% url 'rss.details' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="_method" value="delete">
+                            <button class="button is-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3"> No data available</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock contents %}

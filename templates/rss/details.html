@@ -1,0 +1,51 @@
+{% extends "layouts/base.html" %}
+
+{% block contents %}
+<section class="section">
+    <div class="container">
+        <a href="{% url 'rss.index' %}" class="button is-primary is-pulled-right">Back to list</a>
+        <h1 class="title">Your RSS results</h1>
+    </div>
+    <table class="table is-hoverable is-fullwidth">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.content }}</td>
+            <td>
+                <div class="columns">
+                    <div class="column">
+                        {% if item.favourite %}
+                        <form action="{% url 'favourites.details' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="_method" value="delete">
+                            <button class="button is-danger" type="submit">Remove from favourites</button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'favourites.details' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="button is-info" type="submit">Add to favourites</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4"> No data available</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock contents %}

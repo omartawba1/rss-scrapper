@@ -1,0 +1,26 @@
+{% extends "layouts/base.html" %}
+{% block contents %}
+<section class="hero is-fullheight is-medium is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-centered">
+                <article class="card is-rounded">
+                    <div class="card-content">
+                        <form method="post">
+                            {% include 'partials/_alerts.html' %}
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <p class="control">
+                                <button class="button is-primary is-medium is-fullwidth" type="submit">
+                                    <i class="fa fa-user"></i>
+                                    Login
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock contents %}
